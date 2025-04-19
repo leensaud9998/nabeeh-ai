@@ -26,7 +26,7 @@ X_pca = pca.fit_transform(X_scaled)
 
 # Streamlit UI
 st.set_page_config(page_title="Nabeeh - Chronic Disease Prediction", page_icon="🧠", layout="centered")
-st.title("🧠 Nabeeh - How much is knowing early worth to you?")
+st.title("Nabeeh 🧠 - How much is knowing early worth to you?")
 st.markdown("Select the symptoms you're experiencing, and Nabeeh will predict the most likely disease.")
 
 # User Input
@@ -51,7 +51,7 @@ if st.button("🔍 Predict Disease"):
         proba = model.predict_proba(input_pca)[0]
         top_indices = np.argsort(proba)[::-1][:10]  # Top 3
 
-        st.success("Top 10 Predicted Diseases ✅:")
+        st.success("Top 10 Predicted Diseases:")
         for idx in top_indices:
             disease = model.classes_[idx]
             probability = proba[idx] * 100
