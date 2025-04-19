@@ -33,6 +33,7 @@ st.markdown("Select the symptoms you're experiencing, and Nabeeh will predict th
 selected_symptoms = st.multiselect("Select symptoms:", options=symptom_list)
 
 # Predict Button
+# Predict Button
 if st.button("🔍 Predict Disease"):
     if not selected_symptoms:
         st.warning("⚠️ Please select at least one symptom.")
@@ -42,9 +43,16 @@ if st.button("🔍 Predict Disease"):
             index = symptom_list.index(symptom)
             input_data[index] = 1
 
-        # Ensure the same preprocessing
+        # Apply same preprocessing
         input_scaled = scaler.transform([input_data])
         input_pca = pca.transform(input_scaled)
 
-        prediction = model.predict(input_pca)[0]
-        st.success(f"✅ Predicted Disease: **{prediction}**")
+        # Get prediction probabilities
+        proba = model.predict_proba(input_pca)[0]
+        top_indices = np.argsort(proba)[::-1][:3]  # Top 3
+
+        st.success("✅ Predicted Diseases (Top 3):")
+        for idx in top_indices:
+            disease = model.classes_[idx]
+            probability = proba[idx] * 100
+            st.markdown(f"- **{disease}**: {probability:.2f}%")
