@@ -1,12 +1,18 @@
-import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
+from sklearn.ensemble import RandomForestClassifier
 
-# Load the trained model
-with open("nabeeh_model.pkl", "rb") as f:
-    model = pickle.load(f)
+df = pd.read_csv("Training.csv")
+X = df.iloc[:, :-1]  # 133 symptoms
+y = df.iloc[:, -1]   # prognosis
 
+model = RandomForestClassifier()
+model.fit(X, y)
+
+# Save model
+with open("nabeeh_model.pkl", "wb") as f:
+    pickle.dump(model, f)
 # Load symptom list from the training CSV
 df = pd.read_csv("Training.csv")  # Make sure it's in the same folder or update the path
 symptom_list = df.columns[:-1].tolist()  # All columns except the last one (prognosis)
