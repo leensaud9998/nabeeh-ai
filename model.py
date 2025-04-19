@@ -18,8 +18,9 @@ warnings.filterwarnings("ignore")
 pd.set_option('display.max_columns', None)
 
 # --- Load Data ---
-df = pd.read_csv('data/Training.csv')
-te = pd.read_csv('data/Testing.csv')
+df = pd.read_csv("Training.csv")
+te = pd.read_csv("Testing.csv")
+
 
 # Drop unnamed column
 df = df.drop(df.columns[133], axis=1)
