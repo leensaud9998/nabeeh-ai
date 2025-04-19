@@ -10,7 +10,9 @@ with open("nabeeh_model.pkl", "rb") as f:
 
 
 # Load symptom list from training data
-df = pd.read_csv("data/Training.csv")
+df = pd.read_csv("Training.csv")
+te = pd.read_csv("Testing.csv")
+
 symptom_list = df.columns[:-1].tolist()  # All columns except 'prognosis'
 
 # Streamlit UI setup
