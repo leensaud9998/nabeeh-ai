@@ -2,42 +2,36 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-from sklearn.ensemble import RandomForestClassifier
+import os
 
-# Train model (just once when deploying)
-df = pd.read_csv("Training.csv")
-# Ensure all feature values are numeric
-df = df.apply(pd.to_numeric, errors='ignore')
+# Load trained model
+with open("model/nabeeh_model.pkl", "rb") as f:
+    model = pickle.load(f)
 
-# Drop rows with non-numeric values in symptom columns
-df = df[df.iloc[:, :-1].applymap(np.isreal).all(axis=1)]
+# Load symptom list from training data
+df = pd.read_csv("data/Training.csv")
+symptom_list = df.columns[:-1].tolist()  # All columns except 'prognosis'
 
-X = df.iloc[:, :-1]
-y = df.iloc[:, -1]
-
-model = RandomForestClassifier()
-model.fit(X, y)
-
-# Load symptom list
-symptom_list = df.columns[:-1].tolist()
-
-# Streamlit UI
+# Streamlit UI setup
 st.set_page_config(page_title="Nabeeh - Disease Prediction", page_icon="🧠", layout="centered")
 st.title("🧠 Nabeeh - Intelligent Diagnosis Assistant")
 st.markdown("Select the symptoms you're experiencing, and Nabeeh will predict the most likely disease.")
 
-# User input
+# User symptom selection
 selected_symptoms = st.multiselect("Select symptoms:", options=symptom_list)
 
-# Predict
+# Predict disease
 if st.button("🔍 Predict Disease"):
     if not selected_symptoms:
         st.warning("⚠️ Please select at least one symptom.")
     else:
+        # Create binary input array
         input_data = np.zeros(len(symptom_list))
         for symptom in selected_symptoms:
             index = symptom_list.index(symptom)
             input_data[index] = 1
         input_data = input_data.reshape(1, -1)
+
+        # Make prediction
         prediction = model.predict(input_data)[0]
         st.success(f"✅ Predicted Disease: **{prediction}**")
