@@ -6,8 +6,15 @@ from sklearn.ensemble import RandomForestClassifier
 
 # Train model (just once when deploying)
 df = pd.read_csv("Training.csv")
-X = df.iloc[:, :-1]  # 133 symptoms
-y = df.iloc[:, -1]   # prognosis
+# Ensure all feature values are numeric
+df = df.apply(pd.to_numeric, errors='ignore')
+
+# Drop rows with non-numeric values in symptom columns
+df = df[df.iloc[:, :-1].applymap(np.isreal).all(axis=1)]
+
+X = df.iloc[:, :-1]
+y = df.iloc[:, -1]
+
 model = RandomForestClassifier()
 model.fit(X, y)
 
