@@ -3,18 +3,13 @@ import pandas as pd
 import numpy as np
 import pickle
 
-from sklearn.ensemble import RandomForestClassifier
-import pandas as pd
+# Load the trained model
+with open("nabeeh_model.pkl", "rb") as f:
+    model = pickle.load(f)
 
-df = pd.read_csv("Training.csv")
-X = df.iloc[:, :-1]
-y = df.iloc[:, -1]
-model = RandomForestClassifier()
-model.fit(X, y)
-
-# Load symptom list
-df = pd.read_csv("data/Training.csv")
-symptom_list = df.columns[:-1].tolist()  # All columns except 'prognosis'
+# Load symptom list from the training CSV
+df = pd.read_csv("Training.csv")  # Make sure it's in the same folder or update the path
+symptom_list = df.columns[:-1].tolist()  # All columns except the last one (prognosis)
 
 # Streamlit App UI
 st.set_page_config(page_title="Nabeeh - Disease Prediction", page_icon="🧠", layout="centered")
@@ -34,5 +29,5 @@ if st.button("🔍 Predict Disease"):
             index = symptom_list.index(symptom)
             input_data[index] = 1
         input_data = input_data.reshape(1, -1) 
-        prediction = model.predict([input_data])[0]
+        prediction = model.predict(input_data)[0]
         st.success(f"✅ Predicted Disease: **{prediction}**")
