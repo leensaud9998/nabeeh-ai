@@ -5,7 +5,7 @@ import pickle
 import os
 
 # Load trained model
-with open("model/nabeeh_model.pkl", "rb") as f:
+with open("nabeeh_model.pkl", "rb") as f:
     model = pickle.load(f)
 
 
