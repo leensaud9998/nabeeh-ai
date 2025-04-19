@@ -33,6 +33,6 @@ if st.button("🔍 Predict Disease"):
         for symptom in selected_symptoms:
             index = symptom_list.index(symptom)
             input_data[index] = 1
-
+        input_data = input_data.reshape(1, -1) 
         prediction = model.predict([input_data])[0]
         st.success(f"✅ Predicted Disease: **{prediction}**")
