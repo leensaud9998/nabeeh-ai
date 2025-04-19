@@ -3,9 +3,14 @@ import pandas as pd
 import numpy as np
 import pickle
 
-# Load model
-with open("model/nabeeh_model.pkl", "rb") as f:
-    model = pickle.load(f)
+from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+
+df = pd.read_csv("Training.csv")
+X = df.iloc[:, :-1]
+y = df.iloc[:, -1]
+model = RandomForestClassifier()
+model.fit(X, y)
 
 # Load symptom list
 df = pd.read_csv("data/Training.csv")
